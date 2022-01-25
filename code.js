@@ -52,7 +52,37 @@ const on = (Element, event, selector, handler) => {
     })
 }
 
+// Delete proceses
 on(document, 'click', '.btnBorrar', e => {
     const fila = e.target.parentNode.parentNode;
     const id = fila.firstElementChild.innerHTML;
+
+    alertify.confirm("This is a confirm dialog.",
+  function(){
+    fetch(url+id, {
+        method: 'DELETE'
+    })
+    .then( res => res.json() )
+    .then( ()=> location.reload());
+    //alertify.success('Ok');
+  },
+  function(){
+    alertify.error('Cancel');
+  })
+});
+
+// Delete proceses
+let idForm = 0;
+on(document, 'click', '.btnEditar', e => {
+    const fila = e.target.parentNode.parentNode;
+    idForm = fila.children[0].innerHTML;
+    const descripcionForm = fila.children[1].innerHTML;
+    const precioForm = fila.children[2].innerHTML;
+    const stockForm = fila.children[3].innerHTML;
+    descripcionEl.value = descripcionForm;
+    precioEl.value = precioForm;
+    stockEl.value = stockForm;
+    opcion = 'editar';
+    modalArticulo.show();
+    
 });
