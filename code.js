@@ -20,7 +20,7 @@ let opcion = '';
 btnrCrearEl.addEventListener('click', function () {
     descripcionEl.value = '';
     precioEl.value = '';
-    stock.value = '';
+    stockEl.value = '';
     modalArticulo.show();
     opcion = 'crear';
 });
@@ -85,4 +85,47 @@ on(document, 'click', '.btnEditar', e => {
     opcion = 'editar';
     modalArticulo.show();
     
+});
+
+//Procedimiento para Crear y editar
+formArticulo.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    if (opcion == 'crear') {
+        fetch(url, {
+            method:'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
+                descripcion:descripcionEl.value,
+                precio:precioEl.value,
+                stock:stockEl.value
+            })
+        })
+        .then( response => response.json() )
+        .then (data => {
+            const nuevoArticulo = [];
+            nuevoArticulo.push(data);
+            mostrar(nuevoArticulo);
+        });
+        console.log(descripcionEl.value);
+    }
+    if (opcion == 'editar'){
+        //console.log('OPCION EDITAR');
+        fetch(url+idForm, {
+            method: 'PUT',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
+                descripcion:descripcionEl.value,
+                precio:precioEl.value,
+                stock:stockEl.value
+            })
+        })
+        .then( response => response.json() )
+        .then( response => location.reload() )
+    }
+
+    modalArticulo.hide();
 });
